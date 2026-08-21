@@ -6,6 +6,20 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://trendss.mx'),
   title: 'trends mx',
   description: "Things you've seen, now within reach. Original only.",
+  openGraph: {
+    type: 'website',
+    siteName: 'trends mx',
+    title: 'trends mx',
+    description: "Things you've seen, now within reach. Original only.",
+    locale: 'en_US',
+    images: [{ url: '/og-en.png', width: 1200, height: 630, alt: 'trends mx' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'trends mx',
+    description: "Things you've seen, now within reach. Original only.",
+    images: ['/og-en.png'],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
