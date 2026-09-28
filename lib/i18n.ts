@@ -37,6 +37,12 @@ export const DICT = {
     gridEmpty: 'pronto — nuevas piezas en camino',
     storeHeroTitle: 'tienda',
     storeHeroSub: 'Todo lo que está pasando, en un solo lugar — 100% original.',
+    pdpBack: '← volver a la tienda',
+    pdpOption: 'opción',
+    pdpBuy: 'comprar',
+    pdpDm: 'pedir por dm',
+    pdpDmNote: 'Mándanos DM con el nombre de la pieza y te la apartamos.',
+    pdpPerks: ['original only — verificado antes de enviarse', 'envíos a todo méxico', 'entrega personal en MTY'],
     origLabel: 'nuestra promesa',
     trust: [
       { icon: 'star', title: '100% originales', body: 'Cada pieza se verifica antes de llegar a ti. Cero imitaciones, cero sorpresas.' },
@@ -85,6 +91,12 @@ export const DICT = {
     gridEmpty: 'soon — new pieces on the way',
     storeHeroTitle: 'store',
     storeHeroSub: "Everything that's happening, in one place — 100% original.",
+    pdpBack: '← back to the store',
+    pdpOption: 'option',
+    pdpBuy: 'buy now',
+    pdpDm: 'order via dm',
+    pdpDmNote: "DM us the name of the piece and we'll hold it for you.",
+    pdpPerks: ['original only — verified before it ships', 'shipping all over méxico', 'hand delivery in MTY'],
     origLabel: 'our promise',
     trust: [
       { icon: 'star', title: '100% authentic', body: 'Every piece is verified before it gets to you. Zero fakes, zero surprises.' },
@@ -112,6 +124,8 @@ export const DICT = {
     footBar: ['© 2026 trends mx — original only', 'trendss.mx', 'estudio ———— creativo'],
   },
 } as const;
+
+export const productPath = (lang: Lang, handle: string) => `${ROUTES[lang].store}/${handle}`;
 
 export type Dict = (typeof DICT)[Lang];
 export const other = (lang: Lang): Lang => (lang === 'es' ? 'en' : 'es');

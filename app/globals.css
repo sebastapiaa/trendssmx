@@ -393,6 +393,50 @@ section{position:relative;z-index:2;background:var(--hueso)}
   display:none;padding:80px 0;text-align:center;
   font-family:var(--serif);font-style:italic;font-size:1.5rem;opacity:.6;
 }
+/* cards are links to the PDP */
+a.card{display:block;text-decoration:none;-webkit-tap-highlight-color:transparent}
+
+/* ---------- product page (PDP) ---------- */
+.pdp{padding:150px 0 120px}
+.pdp-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:80px;align-items:start}
+.pdp-gallery{display:grid;gap:18px}
+.pdp-main{position:relative;aspect-ratio:1;border-radius:4px;overflow:hidden}
+.pdp-main .card-circle{top:50%;width:72%}
+.pdp-main .card-circle svg{width:44%;height:44%}
+.pdp-thumbs{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.pdp-thumb{position:relative;aspect-ratio:1;border-radius:4px;overflow:hidden;background:#fff}
+.pdp-thumb img{object-fit:cover}
+.pdp-info{position:sticky;top:120px}
+.pdp-info h1{
+  font-family:var(--serif);font-weight:400;font-size:clamp(2.25rem,4vw,3.5rem);
+  letter-spacing:var(--track-head);line-height:1.04;margin-top:28px;
+}
+.pdp-price{margin-top:20px;font-size:1.25rem;letter-spacing:.03em}
+.pdp-price small{font-size:.7em;opacity:.7;margin-left:3px}
+.pdp-desc{margin-top:24px;font-size:.9375rem;line-height:1.7;opacity:.82;max-width:44ch;white-space:pre-line}
+.pdp-buy{margin-top:36px;display:grid;gap:14px;max-width:380px}
+.pdp-option{display:grid;gap:8px;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;opacity:.9}
+.pdp-option select{
+  font:inherit;font-size:.9375rem;letter-spacing:var(--track-ui);text-transform:none;
+  color:var(--gris);background:transparent;border:1px solid rgba(55,53,54,.35);
+  border-radius:100px;padding:13px 20px;
+}
+.pdp-cta{
+  display:block;text-align:center;cursor:pointer;border:none;
+  font-family:var(--sans);font-size:.8125rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;
+  background:var(--gris);color:var(--hueso);border-radius:100px;padding:18px 36px;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform var(--t-ui) var(--spring),background var(--t-quick) var(--spring);
+}
+.pdp-cta:hover{transform:scale(1.03)}
+.pdp-cta:active{transform:scale(.97);transition:transform var(--t-press) var(--press)}
+.pdp-note{font-size:.8125rem;line-height:1.6;opacity:.72}
+.pdp-perks{list-style:none;margin-top:40px;border-top:1px solid rgba(55,53,54,.2)}
+.pdp-perks li{
+  display:flex;align-items:center;gap:12px;padding:14px 0;
+  border-bottom:1px solid rgba(55,53,54,.2);font-size:.8125rem;letter-spacing:var(--track-ui);
+}
+.pdp-perks svg{width:15px;height:15px;fill:var(--cobalto);flex:none}
 
 /* ---------- original only ---------- */
 .original{position:relative;overflow:hidden;color:#fff}
@@ -603,6 +647,10 @@ footer{background:var(--gris);color:var(--hueso);padding:90px 0 40px}
   .cal-chip{display:inline-block;margin-top:14px}
   .cal-arrow{display:none}
   .manifesto{padding:110px 0 90px}
+  .pdp{padding:110px 0 90px}
+  .pdp-grid{grid-template-columns:1fr;gap:44px}
+  .pdp-info{position:static}
+  .pdp-buy{max-width:none}
   .foot-links{gap:24px;flex-wrap:wrap}
   footer{padding:70px 0 calc(32px + env(safe-area-inset-bottom))}
 }
@@ -651,7 +699,7 @@ footer{background:var(--gris);color:var(--hueso);padding:90px 0 40px}
     background:linear-gradient(90deg,rgba(151,205,237,.22),rgba(246,160,193,.22),rgba(247,169,65,.22));
     transition-duration:var(--t-press);
   }
-  .cta-actions a:hover{transform:none}
+  .cta-actions a:hover,.pdp-cta:hover{transform:none}
   nav:not(.scrolled) .nav-cta:hover{background:none;color:inherit}
   nav.scrolled .nav-cta:hover{background:none;color:inherit}
 }
@@ -670,8 +718,8 @@ footer{background:var(--gris);color:var(--hueso);padding:90px 0 40px}
   /* keep presses/hovers legible, just don't move anything */
   .card:hover,.card:hover .card-bg,.ed-item:hover,.cal-row:hover>*,
   .cta-actions a:hover,.more-link:hover,.bubble:hover .bubble-circle,
-  .cal-row:hover .cal-arrow{transform:none}
-  .bubble:active .bubble-circle,.cta-actions a:active,.nav-cta:active,
+  .cal-row:hover .cal-arrow,.pdp-cta:hover{transform:none}
+  .bubble:active .bubble-circle,.cta-actions a:active,.pdp-cta:active,.nav-cta:active,
   .more-link:active,.ed-item:active,.cal-row:active>*{transform:none;opacity:.7}
   *{transition-duration:.2s!important}
 }

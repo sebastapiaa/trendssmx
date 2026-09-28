@@ -24,8 +24,9 @@ placeholder data — everything still works.
 ## Architecture
 
 ```
-app/(es)/…                ES routes: / /tienda /radar /calendario
-app/(en)/en/…             EN routes: /en /en/store /en/radar /en/calendar
+app/(es)/…                ES routes: / /tienda /tienda/[handle] /radar /calendario
+app/(en)/en/…             EN routes: /en /en/store /en/store/[handle] /en/radar /en/calendar
+app/api/checkout          POST (form) → Storefront cartCreate → 303 to Shopify checkout
                           (two route groups = two root layouts = correct
                           <html lang> per language; localized slugs on purpose)
 app/globals.css           ALL design tokens + components. The design system.
@@ -37,8 +38,10 @@ components/*              sections. Server components except:
   StoreFilter.tsx         'use client' — brand-bubble filtering with state
 lib/i18n.ts               DICT (es/en) + ROUTES. ES is canonical.
 lib/content.ts            placeholder brands/products/events/posts + types
-lib/shopify.ts            Storefront client (ISR 5 min), getBrands/getProducts,
-                          falls back to placeholders when env is missing
+lib/shopify.ts            Storefront client (ISR 5 min), getBrands/getProducts/
+                          getProduct/checkoutEnabled/createCheckout; falls back
+                          to placeholders when env is missing
+lib/image-loader.ts       next/image loader → Shopify CDN ?width= (no Vercel optimizer)
 ```
 
 Key behaviors already wired:
@@ -47,7 +50,21 @@ Key behaviors already wired:
   static/ISR and the FULL grid is in the server HTML. Do not "fix" this by
   switching to `useSearchParams` during render — that CSR-bails the grid out
   of the prerendered HTML (verified) and hurts SEO.
-- Store/landing pages: `export const revalidate = 300` (ISR).
+- Store/landing/PDP pages: `export const revalidate = 300` (ISR).
+- **In-stock only (client requirement).** Sold-out products never appear in
+  any list, their PDPs 404, sold-out variants are never offered. Relies on
+  Shopify "Track quantity" on + "Continue selling when out of stock" off.
+- Brands: if any collection has metafield `custom.brand` = true (Boolean,
+  Storefront access), only flagged collections are brands; otherwise all
+  collections except `frontpage`. Brands with nothing in stock are hidden.
+  A product's brand = its first brand collection (vendor slug = fallback;
+  vendor is currently "Trends MX" on everything, so collections are what count).
+- Checkout: Shopify builds checkout URLs on the store's PRIMARY domain. While
+  that is trendss.mx (= this Vercel site) checkout 404s, so `checkoutEnabled()`
+  is false and the PDP shows "order via DM" instead of "buy". Fix in Shopify
+  admin → Domains: make a subdomain (e.g. shop.trendss.mx) primary — the buy
+  button then turns on by itself within 5 min. Live on Vercel (www.trendss.mx);
+  pushing main deploys.
 - Reveal animations: put `reveal` (+ `d1–d3` stagger) classes on elements;
   ScrollFX observes them. `prefers-reduced-motion` handled globally in CSS.
 - Subpage nav = `solid` prop (always frosted); landing nav frosts after hero.
@@ -90,28 +107,22 @@ reach." / ES "Lo que ves en tu feed, ahora a tu alcance."
   unwritten). Products have NO placeholder fallback — getProducts() returns []
   until Shopify credentials are set (store shows its empty state). Brands
   fallback = Jellycat only.
-- Product images: cards show an emoji-style SVG until `product.image` exists
-  (Shopify `featuredImage.url` — already mapped in lib/shopify.ts; swap
-  `<img>` for `next/image`, remotePatterns for cdn.shopify.com already set)
+- Product images: cards/PDP use next/image with Shopify images; an emoji-style
+  SVG shows only when a product has no image.
 
 ## Roadmap (rough order)
 
-1. Real Shopify store: create collections per brand; convention — product
-   `vendor` slug must match its collection handle (that's how the filter
-   matches; small catalog, easy). Or refactor getProducts to query
-   per-collection.
-2. PDP: `app/(es)/tienda/[handle]/page.tsx` (+ EN mirror) using
-   `productByHandle` query; ProductCard already carries the handle.
-3. Cart/checkout: Storefront Cart API; v1 shortcut = deep-link
-   `https://{shop}.myshopify.com/cart/{variantId}:1` straight to checkout.
-4. Radar: swap POSTS for Shopify blog `articles` query (free CMS — client
+Done: Shopify collections, PDP, buy-now checkout (pending the primary-domain
+fix above), in-stock filtering, full-catalog pagination. Deployed on Vercel.
+
+1. Multi-item cart (Storefront Cart API; buy button is single-item today).
+2. Radar: swap POSTS for Shopify blog `articles` query (free CMS — client
    writes posts from Shopify admin).
-5. Calendario: Shopify metaobjects (`event`: date, title, venue, city, brand
+3. Calendario: Shopify metaobjects (`event`: date, title, venue, city, brand
    ref, link) so the client edits events without code.
-6. Shipping config (do early in Shopify admin): local-delivery method or a
-   shipping profile scoped to Nuevo León zips for MTY hand-delivery,
-   otherwise checkout quotes courier rates to local buyers.
-7. Deploy: Vercel or Railway (TSM already deploys Next.js on Railway).
+4. Shipping config (Shopify admin): local-delivery method or a shipping
+   profile scoped to Nuevo León zips for MTY hand-delivery, otherwise
+   checkout quotes courier rates to local buyers.
 
 ## Conventions
 

@@ -1,7 +1,7 @@
 // Landing store preview: bubbles deep-link to the store pre-filtered
 // (?brand=<collection handle>), grid shows the first 4 products.
 import Link from 'next/link';
-import { DICT, ROUTES, type Lang } from '@/lib/i18n';
+import { DICT, ROUTES, productPath, type Lang } from '@/lib/i18n';
 import type { Brand, Product } from '@/lib/content';
 import { Icon } from './Icons';
 import ProductCard from './ProductCard';
@@ -45,7 +45,7 @@ export default function StorePreview({
         </div>
         <div className="shop-grid">
           {products.slice(0, 4).map((p, i) => (
-            <ProductCard key={p.handle} product={p} revealClass={`reveal${i ? ` d${i}` : ''}`} />
+            <ProductCard key={p.handle} product={p} href={productPath(lang, p.handle)} revealClass={`reveal${i ? ` d${i}` : ''}`} />
           ))}
         </div>
         <Link className="more-link reveal" href={storePath}>

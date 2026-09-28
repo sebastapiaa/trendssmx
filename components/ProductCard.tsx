@@ -1,21 +1,26 @@
 // SHOPIFY MAPPING: title -> .card-name, price -> .price-pill,
-// featuredImage -> <img> in .card-circle (replaces the placeholder icon),
-// handle -> future PDP route (/tienda/[handle]).
+// featuredImage -> <Image> in .card-circle (replaces the placeholder icon),
+// handle -> PDP route (/tienda/[handle] · /en/store/[handle]).
+import Image from 'next/image';
+import Link from 'next/link';
 import type { Product } from '@/lib/content';
 import { Icon } from './Icons';
 
 export default function ProductCard({
   product,
+  href,
   revealClass,
   delay,
 }: {
   product: Product;
+  href: string;
   revealClass?: string;
   delay?: number;
 }) {
   const p = product;
   return (
-    <article
+    <Link
+      href={href}
       className={`card${revealClass ? ` ${revealClass}` : ''}`}
       data-brand={p.brand}
       data-shopify-handle={p.handle}
@@ -33,8 +38,7 @@ export default function ProductCard({
       </div>
       <div className="card-circle">
         {p.image ? (
-          // eslint-disable-next-line @next/next/no-img-element -- swap to next/image once real assets land
-          <img src={p.image} alt={p.title} />
+          <Image src={p.image} alt={p.title} fill sizes="(max-width: 560px) 32vw, 220px" />
         ) : (
           <Icon name={p.icon} fill={p.iconColor} />
         )}
@@ -42,6 +46,6 @@ export default function ProductCard({
       <div className="price-pill">
         {p.price} <small>mxn</small>
       </div>
-    </article>
+    </Link>
   );
 }

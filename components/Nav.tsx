@@ -3,7 +3,17 @@ import { DICT, IG_URL, ROUTES, other, type Lang, type PageKey } from '@/lib/i18n
 
 const KEYS = ['store', 'radar', 'cal'] as const;
 
-export default function Nav({ lang, active, solid = false }: { lang: Lang; active: PageKey; solid?: boolean }) {
+export default function Nav({
+  lang,
+  active,
+  solid = false,
+  altHref,
+}: {
+  lang: Lang;
+  active: PageKey;
+  solid?: boolean;
+  altHref?: string; // same page in the other language (defaults to the section root)
+}) {
   const t = DICT[lang];
   const r = ROUTES[lang];
   const altLang = other(lang);
@@ -22,7 +32,7 @@ export default function Nav({ lang, active, solid = false }: { lang: Lang; activ
         ))}
       </ul>
       <div className="nav-right">
-        <Link className="nav-lang" href={ROUTES[altLang][active]}>
+        <Link className="nav-lang" href={altHref ?? ROUTES[altLang][active]}>
           {altLang}
         </Link>
         <a className="nav-cta" href={IG_URL} target="_blank" rel="noopener noreferrer">

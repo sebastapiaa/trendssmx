@@ -3,7 +3,7 @@
 // (SEO + instant paint); deep links (?brand=<collection handle>) from the
 // landing bubbles are applied after mount so the route stays static/ISR.
 import { useEffect, useMemo, useState } from 'react';
-import { DICT, type Lang } from '@/lib/i18n';
+import { DICT, productPath, type Lang } from '@/lib/i18n';
 import type { Brand, Product } from '@/lib/content';
 import { Icon } from './Icons';
 import ProductCard from './ProductCard';
@@ -70,7 +70,7 @@ export default function StoreFilter({
         {/* key={active} remounts the grid so cards replay their entrance animation */}
         <div className="shop-grid" key={active}>
           {shown.map((p, i) => (
-            <ProductCard key={p.handle} product={p} delay={i * 0.05} />
+            <ProductCard key={p.handle} product={p} href={productPath(lang, p.handle)} delay={i * 0.05} />
           ))}
         </div>
         {shown.length === 0 && (

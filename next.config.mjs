@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [{ protocol: 'https', hostname: 'cdn.shopify.com' }],
+    // Shopify CDN does the resizing (see lib/image-loader.ts)
+    loader: 'custom',
+    loaderFile: './lib/image-loader.ts',
   },
 };
 export default nextConfig;

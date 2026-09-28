@@ -27,6 +27,21 @@ export interface Product {
   image?: string;       // Shopify featuredImage.url (replaces icon)
 }
 
+export interface Variant {
+  id: string;           // Shopify ProductVariant gid (cart merchandiseId)
+  title: string;        // '' for products without options
+  price: string;        // display price, no currency suffix
+  amount: string;       // raw decimal, for structured data
+  currency: string;
+}
+
+// PDP data. Only in-stock variants are ever present.
+export interface ProductDetail extends Product {
+  images: Array<{ url: string; alt: string; width: number; height: number }>;
+  description: string;
+  variants: Variant[];
+}
+
 export interface EventItem {
   day: string;
   month: Record<Lang, string>;
